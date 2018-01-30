@@ -40,7 +40,7 @@ $package = [
  * Define directory constants
  */
 define('SOURCE_DIR', __DIR__.'/setup');
-define('TARGET_DIR', __DIR__);
+define('TARGET_DIR', __DIR__.'/youcanremovethisshit');
 
 /**
  * Create src directory
@@ -222,6 +222,39 @@ class '.$testName.'Test extends TestCase
     }
 
 }'.PHP_EOL);
+
+
+function ask($options, $callback) {
+    $response = null;
+    do {
+        $response = readline("Enter [yes or no]:");
+    } while (!in_array($response, $options));
+    readline_add_history($response);
+    
+    return $callback($response);
+}
+
+ask([
+    'question' => 'Would you like to remove the setup files?',
+    'expected' => ['y', 'yes', 'n', 'no']
+], function ($response) {
+    echo sprintf('You entered: %s', $response);
+});
+
+exit;
+
+//
+$options  = ['y', 'yes', 'n', 'no'];
+
+
+echo sprintf('You entered: %s', $response);
+
+exit;
+
+# done
+echo 'Done, you can now remove the setup.php and the ./setup/ folder.'.PHP_EOL;
+echo 'Happy coding!'.PHP_EOL;
+
 
 # done
 echo 'Done, you can now remove the setup.php and the ./setup/ folder.'.PHP_EOL;
