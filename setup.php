@@ -252,7 +252,7 @@ ask([
 ], function ($response) {
     if (in_array($response, ['y', 'yes'])) {
         `composer install`;
-        `./vendor/bin/phpunit --configuration phpunit.xml --coverage-text`;
+        `composer test`;
     }
 });
 
