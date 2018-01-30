@@ -251,7 +251,8 @@ ask([
     'expected' => ['y', 'yes', 'n', 'no']
 ], function ($response) {
     if (in_array($response, ['y', 'yes'])) {
-        `composer install && sleep 2 && vendor/bin/phpunit --configuration phpunit.xml --coverage-text`;
+        `composer install`;
+        `./vendor/bin/phpunit --configuration phpunit.xml --coverage-text`;
     }
 });
 
