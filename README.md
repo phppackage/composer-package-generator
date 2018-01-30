@@ -28,7 +28,7 @@ creating your composer package.
 Git clone this project:
 
 ``` bash
-$ git clone git@github.com:lcherone/composer-package-generator.git .
+$ git clone git@github.com:phppackage/package-generator.git .
 ```
 
 Don't forget to delete the `.git/` folder!
