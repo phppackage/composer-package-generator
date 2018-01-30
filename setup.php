@@ -2,31 +2,34 @@
 /**
  * Define the package settings
  */
+$vendor  = 'PHPPackage';
+$package = 'MyPackage';
+
 $package = [
-    'name' => 'vendor/package',
+    'name' => strtolower($vendor).'/'.strtolower($package),
     'title' => 'My Package',
     'description' => 'This is my package, description.',
     'type' => 'library',
     'keywords' => [
         'example', 'project', 'boilerplate', 'package'
     ],
-    'homepage' => 'http://github.com/vendor/package',
+    'homepage' => 'http://github.com/'.strtolower($vendor).'/'.strtolower($package),
     'authors' => [
         [
             'name' => 'Your Name',
             'email' => 'your-email@example.com',
-            'homepage' => 'http://github.com/vendor',
+            'homepage' => 'http://github.com/'.strtolower($vendor),
             'role' => 'Owner'
         ]
     ],
     'autoload' => [
         'psr-4' => [
-            'Vendor\\Package\\' => 'src',
+            $vendor.'\\'.$package.'\\' => 'src',
         ]
     ],
     'autoload-dev' => [
         'psr-4' => [
-            'Vendor\\Package\\Tests\\' => 'tests',
+            $vendor.'\\'.$package.'\\Tests\\' => 'tests',
         ]
     ]
 ];
@@ -125,17 +128,65 @@ file_put_contents(
     ], JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT)
 );
 
-// unit test
+// create placeholder class
 $namespace = rtrim(array_search('src', $package['autoload']['psr-4']), '\\');
-$testName = str_replace(' ', null, ucwords(str_replace('\\', ' ', $namespace))).'Test';
+$testName = str_replace([' ', $vendor], null, ucwords(str_replace('\\', ' ', $namespace)));
 
-file_put_contents(TARGET_DIR.'/tests/'.$testName.'.php', '<?php
+$authors = [];
+foreach ($package['authors'] as $author) {
+    $authors[] = ' |   '.sprintf('%s <%s>', $author['name'], $author['email']);
+}
+// create class
+file_put_contents(TARGET_DIR.'/src/'.$testName.'.php', '<?php
+/*
+ +-----------------------------------------------------------------------------+
+ | '.$vendor.' - '.$package['title'].'
+ +-----------------------------------------------------------------------------+
+ | Copyright (c)'.date('Y').' ('.$package['homepage'].')
+ +-----------------------------------------------------------------------------+
+ | This source file is subject to MIT License
+ | that is bundled with this package in the file LICENSE.
+ |
+ | If you did not receive a copy of the license and are unable to
+ | obtain it through the world-wide-web, please send an email
+ | to '.$package['authors'][0]['email'].' so we can send you a copy immediately.
+ +-----------------------------------------------------------------------------+
+ | Authors:
+'.implode(PHP_EOL, $authors).'
+ +-----------------------------------------------------------------------------+
+ */
+
+namespace '.$namespace.';
+
+class '.$testName.'
+{
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function exampleMetod()
+    {
+        return \'foobar\';
+    }
+
+}'.PHP_EOL);
+
+// create unit test
+file_put_contents(TARGET_DIR.'/tests/'.$testName.'Test.php', '<?php
 
 namespace '.$namespace.';
 
 use PHPUnit\Framework\TestCase;
 
-class '.$testName.' extends TestCase
+class '.$testName.'Test extends TestCase
 {
 
     /**
@@ -143,7 +194,7 @@ class '.$testName.' extends TestCase
      */
     public function setUp()
     {
-
+        $this->instance = new '.$testName.'();
     }
 
     /**
@@ -152,6 +203,22 @@ class '.$testName.' extends TestCase
     public function testTrueIsTrue()
     {
         $this->assertTrue(true);
+    }
+    
+    /**
+     * has class initialised?
+     */
+    public function testObjectInstanceOf()
+    {
+        $this->assertInstanceOf(\'\\'.$namespace.'\\'.$testName.'\', $this->instance);
+    }
+    
+    /**
+     * @covers \\'.$namespace.'\\'.$testName.'::exampleMetod()
+     */
+    public function testExampleMetod()
+    {
+        $this->assertEquals(\'foobar\', $this->instance->exampleMetod());             
     }
 
 }'.PHP_EOL);
