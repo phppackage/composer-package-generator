@@ -1,5 +1,7 @@
 ## Composer Package Generator
 
+Tweeked for organisation (PHPPackage), if you want a more generic version [use this](https://github.com/lcherone/composer-package-generator). 
+
 This very simple PHP script will generate the following structure, ready to start 
 creating your composer package.
 
