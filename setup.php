@@ -237,11 +237,11 @@ function ask($options, $callback) {
 echo 'Your package files have been generated successfully!'.PHP_EOL;
 
 ask([
-    'question' => 'Would you like to remove the setup files?',
+    'question' => 'Would you like to remove the setup files? [yes|no]:',
     'expected' => ['y', 'yes', 'n', 'no']
 ], function ($response) {
     if (in_array($response, ['y', 'yes'])) {
-        `rm -R ./setup  && rm -f setup.php && rm -R .git/`;
+        `rm -Rf ./setup  && rm -f setup.php && rm -Rf .git/`;
         echo 'Setup files have been removed.'.PHP_EOL;
     }
 });
