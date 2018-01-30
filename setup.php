@@ -246,4 +246,13 @@ ask([
     }
 });
 
+ask([
+    'question' => 'Would you like to run composer install and run tests? [yes|no]:',
+    'expected' => ['y', 'yes', 'n', 'no']
+], function ($response) {
+    if (in_array($response, ['y', 'yes'])) {
+        `composer install && composer test`;
+    }
+});
+
 echo 'Happy coding!'.PHP_EOL;
