@@ -5,9 +5,10 @@ creating your composer package.
 
      ┐
      ├── src
+     │   ├── MyPackage.php (generated based upon your package name)
      ├── tests
      │   ├── fixtures
-     │   ├── VendorPackageTest.php (generated based upon your namespace)
+     │   ├── PHPPackageMyPackageTest.php (generated based upon your namespace)
      │   └── bootstrap.php
      ├── .gitignore
      ├── .scrutinizer.yml
@@ -35,34 +36,38 @@ Don't forget to delete the `.git/` folder!
 
 Open up and edit `setup.php`, enter your details in the following array:
 
+    <?php
     /**
      * Define the package settings
      */
+    $vendor  = 'PHPPackage';
+    $package = 'MyPackage';
+    
     $package = [
-        'name' => 'vendor/package',
+        'name' => strtolower($vendor).'/'.strtolower($package),
         'title' => 'My Package',
         'description' => 'This is my package, description.',
         'type' => 'library',
         'keywords' => [
             'example', 'project', 'boilerplate', 'package'
         ],
-        'homepage' => 'http://github.com/vendor/package',
+        'homepage' => 'http://github.com/'.strtolower($vendor).'/'.strtolower($package),
         'authors' => [
             [
                 'name' => 'Your Name',
                 'email' => 'your-email@example.com',
-                'homepage' => 'http://github.com/vendor',
+                'homepage' => 'http://github.com/'.strtolower($vendor),
                 'role' => 'Owner'
             ]
         ],
         'autoload' => [
             'psr-4' => [
-                'Vendor\\Package\\' => 'src',
+                $vendor.'\\'.$package.'\\' => 'src',
             ]
         ],
         'autoload-dev' => [
             'psr-4' => [
-                'Vendor\\Package\\Tests\\' => 'tests',
+                $vendor.'\\'.$package.'\\Tests\\' => 'tests',
             ]
         ]
     ];
