@@ -40,7 +40,7 @@ $package = [
  * Define directory constants
  */
 define('SOURCE_DIR', __DIR__.'/setup');
-define('TARGET_DIR', __DIR__.'/youcanremovethisshit');
+define('TARGET_DIR', __DIR__);
 
 /**
  * Create src directory
@@ -227,35 +227,23 @@ class '.$testName.'Test extends TestCase
 function ask($options, $callback) {
     $response = null;
     do {
-        $response = readline("Enter [yes or no]:");
-    } while (!in_array($response, $options));
+        $response = readline($options['question']);
+    } while (!in_array($response, $options['expected']));
     readline_add_history($response);
     
     return $callback($response);
 }
 
+echo 'Your package files have been generated successfully!'.PHP_EOL;
+
 ask([
     'question' => 'Would you like to remove the setup files?',
     'expected' => ['y', 'yes', 'n', 'no']
 ], function ($response) {
-    echo sprintf('You entered: %s', $response);
+    if (in_array($response, ['y', 'yes'])) {
+        `rm -R ./setup  && rm -f setup.php && rm -R .git/`;
+        echo 'Setup files have been removed.'.PHP_EOL;
+    }
 });
 
-exit;
-
-//
-$options  = ['y', 'yes', 'n', 'no'];
-
-
-echo sprintf('You entered: %s', $response);
-
-exit;
-
-# done
-echo 'Done, you can now remove the setup.php and the ./setup/ folder.'.PHP_EOL;
-echo 'Happy coding!'.PHP_EOL;
-
-
-# done
-echo 'Done, you can now remove the setup.php and the ./setup/ folder.'.PHP_EOL;
 echo 'Happy coding!'.PHP_EOL;
