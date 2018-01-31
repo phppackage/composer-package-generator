@@ -252,7 +252,7 @@ ask([
 ], function ($response) {
     if (in_array($response, ['y', 'yes'])) {
         `composer install`;
-        `composer test`;
+        echo `composer test`;
     }
 });
 
