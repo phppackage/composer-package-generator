@@ -31,12 +31,11 @@ Git clone this project:
 $ git clone git@github.com:phppackage/package-generator.git .
 ```
 
-Don't forget to delete the `.git/` folder!
 
+## Generate your package files
 
-## Generate your project files, like a boss!
+Open up and edit `setup.php`, enter the details of your package in the following array:
 
-Open up and edit `setup.php`, enter your details in the following array:
 
     <?php
     /**
@@ -74,15 +73,13 @@ Open up and edit `setup.php`, enter your details in the following array:
         ]
     ];
 
-Once you edited the array, save the file and then run the following to generate 
-your project files:
+Once you finished save the file and run the following to generate your project files:
 
 ``` bash
 $ php setup.php
 ```
 
-Examine the generated files and make your tweeks, especially the `README.md` which 
-your need to finish off. 
+At the end it will ask you if you want to remove the `setup` files and execute composer install and run unit tests.
 
 **Badges:**
 
