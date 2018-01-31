@@ -223,7 +223,11 @@ class '.$testName.'Test extends TestCase
 
 }'.PHP_EOL);
 
+echo 'Your package files have been successfully generated!'.PHP_EOL;
 
+/**
+ * Ask question, do callback.
+ */
 function ask($options, $callback) {
     $response = null;
     do {
@@ -234,11 +238,11 @@ function ask($options, $callback) {
     return $callback($response);
 }
 
-echo 'Your package files have been generated successfully!'.PHP_EOL;
+$yesno = ['y', 'yes', 'n', 'no'];
 
 ask([
     'question' => 'Would you like to remove the setup files? [yes|no]:',
-    'expected' => ['y', 'yes', 'n', 'no']
+    'expected' => $yesno
 ], function ($response) {
     if (in_array($response, ['y', 'yes'])) {
         `rm -Rf ./setup  && rm -f setup.php && rm -Rf .git/`;
@@ -248,7 +252,7 @@ ask([
 
 ask([
     'question' => 'Would you like to run composer install and run tests? [yes|no]:',
-    'expected' => ['y', 'yes', 'n', 'no']
+    'expected' => $yesno
 ], function ($response) {
     if (in_array($response, ['y', 'yes'])) {
         `composer install`;
@@ -256,4 +260,4 @@ ask([
     }
 });
 
-echo 'Happy coding!'.PHP_EOL;
+echo 'Happy coding! - If you liked this, star it!'.PHP_EOL;
