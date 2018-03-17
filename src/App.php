@@ -8,36 +8,44 @@ class App extends MagicClass
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->cli = new Cli($this);
         $this->package = new Package($this);
         $this->config = new Config($this);
-        
+
         $this->filesystem = new Filesystem($this);
     }
-    
+
     public function run()
     {
         $this->cli->clear();
         $this->cli->arguments();
-        
+
         $this->config->check_php_version(7);
-        
+
         if ($this->arguments['wizard']) {
             $package = $this->package->wizard();
         }
-        
+
         if ($this->arguments['init']) {
             $package = $this->package->init();
         }
-        
+
         // start building package
-        $this->filesystem->target_dir = $this->config->basepath().'/MY-PACKAGE';
+        // detect if has a composer (cloned)
+        if (file_exists($this->config->basepath().'/composer.json')) {
+            $this->filesystem->target_dir = $this->config->basepath().'/'.basename($package['name']);
+        }
+        // detect if no composer.json presume downloaded build
+        else {
+            $this->filesystem->target_dir = $this->config->basepath();
+        }
+
         $this->filesystem->source_dir = __DIR__.'/setup';
-        
+
         $this->filesystem->create_directory('src');
         $this->filesystem->create_directory('tests/fixtures');
-        
+
         /**
          * Move unchanged files
          */
@@ -59,7 +67,7 @@ class App extends MagicClass
         /**
          * Process/Create files which change
          */
-        
+
         // README.md
         $authors = [];
         foreach ($package['authors'] as $author) {
@@ -71,7 +79,7 @@ class App extends MagicClass
             'description' => $package['description'],
             'authors' => implode(PHP_EOL, $authors)
         ]);
-        
+
         // composer.json
         file_put_contents(
             $this->filesystem->target_dir.'/composer.json',
@@ -98,16 +106,16 @@ class App extends MagicClass
                 'minimum-stability' => 'stable'
             ], JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT)
         );
-        
+
         // create placeholder class
         $namespace = rtrim(array_search('src', $package['autoload']['psr-4']), '\\');
         $testName = str_replace([' ', $package['vendor']], null, ucwords(str_replace('\\', ' ', $namespace)));
-        
+
         $authors = [];
         foreach ($package['authors'] as $author) {
             $authors[] = ' |   '.sprintf('%s <%s>', $author['name'], $author['email']);
         }
-        
+
         // create class
         file_put_contents($this->filesystem->target_dir.'/src/'.$testName.'.php', '<?php
 /*
@@ -176,7 +184,7 @@ class '.$testName.'Test extends TestCase
     {
         $this->assertTrue(true);
     }
-    
+
     /**
      * has class initialised?
      */
@@ -184,13 +192,13 @@ class '.$testName.'Test extends TestCase
     {
         $this->assertInstanceOf(\'\\'.$namespace.'\\'.$testName.'\', $this->instance);
     }
-    
+
     /**
      * @covers \\'.$namespace.'\\'.$testName.'::exampleMetod()
      */
     public function testExampleMethod()
     {
-        $this->assertEquals(\'foobar\', $this->instance->exampleMethod());             
+        $this->assertEquals(\'foobar\', $this->instance->exampleMethod());
     }
 
 }'.PHP_EOL);
@@ -206,10 +214,10 @@ class '.$testName.'Test extends TestCase
                 $response = readline($options['question']);
             } while (!in_array($response, $options['expected']));
             readline_add_history($response);
-            
+
             return $callback($response);
         };
-        
+
         $yesno = ['y', 'yes', 'n', 'no'];
 
         $ask([
@@ -221,7 +229,7 @@ class '.$testName.'Test extends TestCase
                 echo `composer test`;
             }
         });
-        
+
         echo 'Happy coding! - If you liked this, star it!'.PHP_EOL;
     }
 
