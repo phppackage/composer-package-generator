@@ -1,0 +1,31 @@
+{
+    "chmod": "0755",
+    "compression": "GZ",
+    "directories": [
+        "src"
+    ],
+    "finder": [
+        {
+            "in": "vendor",
+            "name": "*.php",
+            "exclude": [
+                "phpunit",
+                "myclabs",
+                "phpspec",
+                "phpdocumentor",
+                "phpunit-test-case",
+                "bin",
+                "doctrine",
+                "sebastian",
+                "webmozart",
+                "Tester",
+                "Tests",
+                "tests"
+            ]
+        }
+    ],
+    "main": "src/_bootstrap.php",
+    "output": "package-generator.phar",
+    "stub": true,
+    "web": false
+}

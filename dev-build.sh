@@ -1,0 +1,72 @@
+#!/bin/bash
+
+#
+# Build.sh - 
+#  Helper script which monitors changes, builds then starts php 
+#  inbuilt server to run test script.
+#
+#  Works most of the time; but sometimes throws segfault when starting php server :/
+#
+
+#if [[ $EUID -ne 0 ]]; then
+#   echo "This script must be run as root: sudo bash build.sh" 
+#   exit 1
+#fi
+
+SRC="src"
+VENDOR="vendor"
+#TST="../../php_inbuilt/code"
+
+function block {
+    inotifywait -q -r -e modify,move,create,delete $SRC $VENDOR
+}
+
+#function stop_php_server {
+#    for pid in $(ps -ef | awk '/php -S 0.0.0.0/{print $2}'); do  
+#        echo "Killing PHP process: $pid"
+#        sudo kill -9 $pid
+#    done
+#}
+
+#function start_php_server {
+#    sudo nohup php -S 0.0.0.0:81 -t "$TST" >nohup.out 2>&1 &
+#}
+
+#function run_test_script {
+#    time php $TST/client.php
+#}
+
+function main {
+
+    clear
+    
+    /usr/bin/php -c /etc/php/7.0/cli/php.ini -f box.phar build -v
+    
+    clear
+    
+    /usr/bin/php package-generator.phar -w
+
+    #echo "Stopping PHP inbuilt server"
+    #stop_php_server
+
+    # build extension
+    #echo "Building $SRC extension"
+    #zephir install
+    
+    #sleep 1
+    
+    #echo "Starting PHP inbuilt server"
+    #start_php_server
+    
+    #sleep 5
+
+    #echo "Executing test script"
+    #echo "---------------------"
+    #run_test_script
+}
+
+main
+
+while block; do
+    main
+done
