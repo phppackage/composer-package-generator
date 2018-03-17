@@ -22,6 +22,11 @@ creating your composer package.
      ├── README.md
      └── composer.json
      
+## Download
+
+You can find prebuilt versions in [releases](https://github.com/phppackage/package-generator/releases), or simply do wget as shown below:
+
+`get https://github.com/phppackage/package-generator/releases/download/0.0.1/package-generator.phar`
 
 ## Install
 
